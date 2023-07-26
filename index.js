@@ -55,6 +55,18 @@ const addConfig = ({ app_name, env_file, appdir }) => {
   }
 };
 
+const setAddons = ({ app_name, addons }) => {
+  if (addons) {
+    console.log('Setting up addons');
+
+    const addonsArray = addons.split(',');
+
+    for (let i = 0; i < addonsArray.length; i++) {
+      execSync(`heroku addons:create ${addonsArray[i]} --app=${app_name}`);
+    }
+  }
+};
+
 const createProcfile = ({ procfile, appdir }) => {
   if (procfile) {
     fs.writeFileSync(path.join(appdir, "Procfile"), procfile);
@@ -151,6 +163,7 @@ let heroku = {
   region: core.getInput("region"),
   stack: core.getInput("stack"),
   team: core.getInput("team"),
+  addons: core.getInput("addons") || ""
 };
 
 // Formatting
@@ -219,6 +232,7 @@ if (heroku.dockerBuildArgs) {
 
     addRemote(heroku);
     addConfig(heroku);
+    setAddons(heroku);
 
     try {
       deploy({ ...heroku, dontuseforce: true });
