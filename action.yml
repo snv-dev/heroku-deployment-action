@@ -83,6 +83,10 @@ inputs:
     description: "If deploying to an organization, then specify the name of the team or organization here"
     required: false
     default: ""
+  addons:
+    description: "Specify addons to be set (valid for review apps)"
+    required: false
+    default: ""
 outputs:
   status:
     description: "The Success/Failure of the action"
