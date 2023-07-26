@@ -1,0 +1,31 @@
+{
+  "name": "heroku-deploy",
+  "version": "1.0.0",
+  "description": "A simple github action that dynamically deploys an app to heroku",
+  "main": "index.js",
+  "scripts": {
+    "test": "node scripts/test",
+    "test-action": "node scripts/test-action",
+    "setup": "node scripts/setup",
+    "start": "node index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/snv-dev/heroku-deployment-action.git"
+  },
+  "keywords": [
+    "heroku",
+    "github",
+    "github-actions"
+  ],
+  "author": "SNV",
+  "bugs": {
+    "url": "https://github.com/snv-dev/heroku-deployment-action/issues"
+  },
+  "homepage": "https://github.com/snv-dev/heroku-deployment-action#readme",
+  "license": "MIT",
+  "dependencies": {
+    "@actions/core": "^1.10.0",
+    "phin": "^3.5.0"
+  }
+}
