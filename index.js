@@ -55,22 +55,26 @@ const addConfig = ({ app_name, env_file, appdir }) => {
   }
 };
 
-const setAddons = ({ app_name, addons }) => {
-  if (addons && Array.isArray(addons)) {
+const setAddons = ({ app_name, addons = "" }) => {
+  if (addons) {
     console.log('Setting up addons');
 
-    for (let i = 0; i < addons.length; i++) {
-      execSync(`heroku addons:create ${addons[i]} --app=${app_name}`);
+    const addonsArray = addons.split(',');
+
+    for (let i = 0; i < addonsArray.length; i++) {
+      execSync(`heroku addons:create ${addonsArray[i]} --app=${app_name}`);
     }
   }
 };
 
-const setBuildpacks = ({ app_name, buildpacks }) => {
-  if (buildpacks && Array.isArray(buildpacks)) {
+const setBuildpacks = ({ app_name, buildpacks = "" }) => {
+  if (buildpacks) {
     console.log('Setting up buildpacks');
 
-    for (let i = 0; i < buildpacks.length; i++) {
-      execSync(`heroku buildpacks:add ${buildpacks[i]} --app=${app_name}`);
+    const buildpacksArray = buildpacks.split(',');
+
+    for (let i = 0; i < buildpacksArray.length; i++) {
+      execSync(`heroku buildpacks:add ${buildpacksArray[i]} --app=${app_name}`);
     }
   }
 };
