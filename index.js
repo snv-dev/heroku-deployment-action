@@ -56,13 +56,21 @@ const addConfig = ({ app_name, env_file, appdir }) => {
 };
 
 const setAddons = ({ app_name, addons }) => {
-  if (addons) {
+  if (addons && Array.isArray(addons)) {
     console.log('Setting up addons');
 
-    const addonsArray = addons.split(',');
+    for (let i = 0; i < addons.length; i++) {
+      execSync(`heroku addons:create ${addons[i]} --app=${app_name}`);
+    }
+  }
+};
 
-    for (let i = 0; i < addonsArray.length; i++) {
-      execSync(`heroku addons:create ${addonsArray[i]} --app=${app_name}`);
+const setBuildpacks = ({ app_name, buildpacks }) => {
+  if (buildpacks && Array.isArray(buildpacks)) {
+    console.log('Setting up buildpacks');
+
+    for (let i = 0; i < buildpacks.length; i++) {
+      execSync(`heroku buildpacks:add ${buildpacks[i]} --app=${app_name}`);
     }
   }
 };
@@ -232,6 +240,7 @@ if (heroku.dockerBuildArgs) {
 
     addRemote(heroku);
     addConfig(heroku);
+    setBuildpacks(heroku);
     setAddons(heroku);
 
     try {

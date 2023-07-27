@@ -87,6 +87,10 @@ inputs:
     description: "Specify addons to be set (valid for review apps)"
     required: false
     default: ""
+  buildpacks:
+    description: "Specify buildpacks to be set (valid for review apps)"
+    required: false
+    default: ""
 outputs:
   status:
     description: "The Success/Failure of the action"
