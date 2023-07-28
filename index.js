@@ -16,7 +16,7 @@ machine git.heroku.com
     password ${api_key}
 EOF`;
 
-const addRemote = ({ app_name, dontautocreate, region, team, stack }) => {
+const addRemote = ({ app_name, dontautocreate, region, team }) => {
   try {
     execSync("heroku git:remote --app " + app_name);
     console.log("Added git remote heroku");
@@ -27,7 +27,6 @@ const addRemote = ({ app_name, dontautocreate, region, team, stack }) => {
       "heroku create " +
         app_name +
         (region ? " --region " + region : "") +
-        (stack ? " --stack " + stack : "") +
         (team ? " --team " + team : "")
     );
   }
@@ -80,6 +79,12 @@ const setBuildpacks = ({ app_name, buildpacks = "" }) => {
     }
   }
 };
+
+const setStack = ({ app_name, stack }) => {
+  if (stack) {
+    execSync(`heroku stack:set ${stack} --app=${app_name}`);
+  }
+}
 
 const createProcfile = ({ procfile, appdir }) => {
   if (procfile) {
@@ -247,6 +252,7 @@ if (heroku.dockerBuildArgs) {
     addRemote(heroku);
     addConfig(heroku);
     setBuildpacks(heroku);
+    setStack(heroku);
     setAddons(heroku);
 
     try {
