@@ -91,6 +91,10 @@ inputs:
     description: "Specify buildpacks to be set (valid for review apps)"
     required: false
     default: ""
+  formation:
+    description: "Dyno scaling (valid for review apps)"
+    required: false
+    default: ""
 outputs:
   status:
     description: "The Success/Failure of the action"

@@ -82,7 +82,15 @@ const setBuildpacks = ({ app_name, buildpacks = "" }) => {
 
 const setStack = ({ app_name, stack }) => {
   if (stack) {
+    console.log('Setting up stack');
     execSync(`heroku stack:set ${stack} --app=${app_name}`);
+  }
+}
+
+const setScaling = ({ app_name, formation }) => {
+  if (formation) {
+    console.log('Dyno scaling');
+    execSync(`heroku ps:scale ${formation} --app=${app_name}`);
   }
 }
 
@@ -183,6 +191,7 @@ let heroku = {
   team: core.getInput("team"),
   addons: core.getInput("addons") || "",
   buildpacks: core.getInput("buildpacks") || "",
+  formation: core.getInput("formation") || "",
 };
 
 // Formatting
@@ -254,6 +263,7 @@ if (heroku.dockerBuildArgs) {
     setBuildpacks(heroku);
     setStack(heroku);
     setAddons(heroku);
+    setScaling(heroku);
 
     try {
       deploy({ ...heroku, dontuseforce: true });
