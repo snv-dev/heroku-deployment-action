@@ -69,12 +69,15 @@ const setAddons = ({ app_name, addons = "" }) => {
 
 const setBuildpacks = ({ app_name, buildpacks = "" }) => {
   if (buildpacks) {
-    console.log('Setting up buildpacks');
-
     const buildpacksArray = buildpacks.split(',');
 
-    for (let i = 0; i < buildpacksArray.length; i++) {
-      execSync(`heroku buildpacks:add ${buildpacksArray[i]} --app=${app_name}`);
+    if (buildpacksArray.length) {
+      console.log('Setting up buildpacks');
+      execSync(`heroku buildpacks:clear --app=${app_name}`);
+
+      for (let i = 0; i < buildpacksArray.length; i++) {
+        execSync(`heroku buildpacks:add ${buildpacksArray[i]} --app=${app_name}`);
+      }
     }
   }
 };
