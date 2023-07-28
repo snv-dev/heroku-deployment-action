@@ -88,7 +88,6 @@ const setStack = ({ app_name, stack }) => {
 
 const setScaling = ({ app_name, formation }) => {
   if (formation) {
-    console.log('Dyno scaling');
     execSync(`heroku ps:scale ${formation} --app=${app_name}`);
   }
 }
@@ -260,12 +259,12 @@ if (heroku.dockerBuildArgs) {
     addRemote(heroku);
     addConfig(heroku);
     setStack(heroku);
-    setScaling(heroku);
     setBuildpacks(heroku);
     setAddons(heroku);
 
     try {
       deploy({ ...heroku, dontuseforce: true });
+      setScaling(heroku);
     } catch (err) {
       console.error(`
             Unable to push branch because the branch is behind the deployed branch. Using --force to deploy branch. 
@@ -274,6 +273,7 @@ if (heroku.dockerBuildArgs) {
         `);
 
       deploy(heroku);
+      setScaling(heroku);
     }
 
     if (heroku.healthcheck) {
