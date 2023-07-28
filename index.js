@@ -82,7 +82,6 @@ const setBuildpacks = ({ app_name, buildpacks = "" }) => {
 
 const setStack = ({ app_name, stack }) => {
   if (stack) {
-    console.log('Setting up stack');
     execSync(`heroku stack:set ${stack} --app=${app_name}`);
   }
 }
@@ -260,10 +259,10 @@ if (heroku.dockerBuildArgs) {
 
     addRemote(heroku);
     addConfig(heroku);
-    setBuildpacks(heroku);
     setStack(heroku);
-    setAddons(heroku);
     setScaling(heroku);
+    setBuildpacks(heroku);
+    setAddons(heroku);
 
     try {
       deploy({ ...heroku, dontuseforce: true });
