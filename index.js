@@ -92,6 +92,12 @@ const setScaling = ({ app_name, formation }) => {
   }
 }
 
+const runPostdeployScript = ({ app_name, postdeploy }) => {
+  if (postdeploy) {
+    execSync(`heroku run ${postdeploy} --app=${app_name}`);
+  }
+}
+
 const createProcfile = ({ procfile, appdir }) => {
   if (procfile) {
     fs.writeFileSync(path.join(appdir, "Procfile"), procfile);
@@ -190,6 +196,7 @@ let heroku = {
   addons: core.getInput("addons") || "",
   buildpacks: core.getInput("buildpacks") || "",
   formation: core.getInput("formation") || "",
+  postdeploy: core.getInput("postdeploy") || "",
 };
 
 // Formatting
@@ -265,6 +272,7 @@ if (heroku.dockerBuildArgs) {
     try {
       deploy({ ...heroku, dontuseforce: true });
       setScaling(heroku);
+      runPostdeployScript(heroku);
     } catch (err) {
       console.error(`
             Unable to push branch because the branch is behind the deployed branch. Using --force to deploy branch. 
@@ -274,6 +282,7 @@ if (heroku.dockerBuildArgs) {
 
       deploy(heroku);
       setScaling(heroku);
+      runPostdeployScript(heroku);
     }
 
     if (heroku.healthcheck) {
