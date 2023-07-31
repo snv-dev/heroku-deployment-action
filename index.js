@@ -58,12 +58,20 @@ const setAddons = ({ app_name, addons = "" }) => {
     console.log('Setting up addons');
 
     const addonsArray = addons.split(',');
+    let waitRedis = false;
 
     for (let i = 0; i < addonsArray.length; i++) {
+      if (addonsArray[i].includes('heroku-redis')) {
+        waitRedis = true;
+      }
+
       execSync(`heroku addons:create ${addonsArray[i]} --app=${app_name}`);
     }
 
-    execSync(`heroku pg:wait --app=${app_name}`);
+    if (waitRedis) {
+      console.log('Waiting for Redis ...');
+      execSync(`heroku redis:wait --app=${app_name}`);
+    }
   }
 };
 
