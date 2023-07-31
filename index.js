@@ -63,7 +63,7 @@ const setAddons = ({ app_name, addons = "" }) => {
       execSync(`heroku addons:create ${addonsArray[i]} --app=${app_name}`);
     }
 
-    execSync(`heroku heroku pg:wait --app=${app_name}`);
+    execSync(`heroku pg:wait --app=${app_name}`);
   }
 };
 
