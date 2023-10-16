@@ -32,13 +32,15 @@ const addRemote = ({ app_name, dontautocreate, region, team }) => {
   }
 };
 
-const addConfig = ({ app_name, env_file, appdir }) => {
+const addConfig = ({ app_name, env_file, env_variables, appdir }) => {
   let configVars = [];
+
   for (let key in process.env) {
     if (key.startsWith("HD_")) {
       configVars.push(key.substring(3) + "='" + process.env[key] + "'");
     }
   }
+
   if (env_file) {
     const env = fs.readFileSync(path.join(appdir, env_file), "utf8");
     const variables = require("dotenv").parse(env);
@@ -48,6 +50,12 @@ const addConfig = ({ app_name, env_file, appdir }) => {
     }
     configVars = [...configVars, ...newVars];
   }
+
+  if (env_variables) {
+    const newVarsArray = env_variables.split(',');
+    configVars = [...configVars, ...newVarsArray];
+  }
+
   if (configVars.length !== 0) {
     execSync(`heroku config:set --app=${app_name} ${configVars.join(" ")}`);
   }
@@ -207,6 +215,7 @@ let heroku = {
   buildpacks: core.getInput("buildpacks") || "",
   formation: core.getInput("formation") || "",
   postdeploy: core.getInput("postdeploy") || "",
+  env_variables: core.getInput("env_variables") || ""
 };
 
 // Formatting
